@@ -1,0 +1,55 @@
+<template>
+    <v-container>
+        <v-card>
+            <v-form @submit.prevent="update">
+                <v-text-field
+                        v-model="form.title"
+                        label="Title"
+                        type="text"
+                        required
+                ></v-text-field>
+                <markdown-editor v-model="form.body"></markdown-editor>
+                <v-card-actions>
+                    <v-btn icon small type="submit">
+                        <v-icon color="teal">save</v-icon>
+                    </v-btn>
+                    <v-btn icon small @click="cancel">
+                        <v-icon>cancel</v-icon>
+                    </v-btn>
+                </v-card-actions>
+            </v-form>
+        </v-card>
+    </v-container>
+</template>
+
+<script>
+    export default {
+        name: "Edit",
+        data(){return{
+            form:{title:null,category_id:null,body:null},
+
+        }},
+        props:['question'],
+        mounted() {
+            this.form = this.question
+        },
+        methods:{
+            cancel(){
+                EventBus.$emit('cancelEditing')
+            },
+            update(){
+                axios.patch(`/api/question/${this.form.slug}`,this.form)
+                    .then((response)=>{
+
+                    })
+                    .catch((error)=>{
+                        console.log(error.response.data)
+                    })
+            }
+        }
+    }
+</script>
+
+<style scoped>
+
+</style>
